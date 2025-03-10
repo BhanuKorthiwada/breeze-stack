@@ -1,0 +1,24 @@
+.DS_Store
+/node_modules/
+*.tsbuildinfo
+
+# React Router
+/.react-router/
+/build/
+
+# Cloudflare
+.mf
+.wrangler
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.staging
+.env.production
+
+# Cloudflare Environment Variables
+.dev.vars
+
+# VS Code
+.vscode/

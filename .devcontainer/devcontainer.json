@@ -1,0 +1,11 @@
+{
+  "name": "github-devcontainer",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22-bookworm",
+  "forwardPorts": [3030],
+  "postCreateCommand": "bash -i -c 'nvm install --lts' && npm i -g npm pnpm@10 wrangler npm-check-updates && pnpm i",
+  "portsAttributes": {
+    "4005": {
+      "label": "3030-REMIX"
+    }
+  }
+}

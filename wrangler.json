@@ -1,0 +1,133 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "breezestack",
+  "main": "./build/server/index.js",
+  "compatibility_date": "2025-01-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./build/client/"
+  },
+  "keep_vars": false,
+  "send_metrics": false,
+  "workers_dev": true,
+  "minify": true,
+  "logpush": true,
+  "observability": {
+    "enabled": true
+  },
+  "limits": {
+    "cpu_ms": 500
+  },
+  "placement": {
+    "mode": "smart"
+  },
+  "vars": {
+    "APP__ENV": "local",
+    "APP__NAME": "Breeze Stack - Local"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "breezestack_dev",
+      "database_id": "5d0dc686-b582-4de6-993b-8d9bc0b892a7",
+      "preview_database_id": "db_local",
+      "migrations_dir": "./drizzle/cloudflare_d1",
+      "migrations_table": "zzz_migrations"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "ba9da7cf3e4048628188caf58e659749",
+      "preview_id": "kv_local"
+    }
+  ],
+  "ai": {
+    "binding": "AI"
+  },
+
+  "env": {
+    "development": {
+      "workers_dev": true,
+      "vars": {
+        "APP__ENV": "development",
+        "APP__NAME": "Breeze Stack - Development"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "breezestack_dev",
+          "database_id": "5d0dc686-b582-4de6-993b-8d9bc0b892a7",
+          "preview_database_id": "db_local",
+          "migrations_dir": "./drizzle/cloudflare_d1",
+          "migrations_table": "zzz_migrations"
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "KV",
+          "id": "ba9da7cf3e4048628188caf58e659749"
+        }
+      ],
+      "ai": {
+        "binding": "AI"
+      }
+    },
+    "staging": {
+      "workers_dev": true,
+      "vars": {
+        "APP__ENV": "staging",
+        "APP__NAME": "Breeze Stack - Staging"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "breezestack_stg",
+          "database_id": "72bcf2bf-64c4-491a-8180-e1a9d989be50",
+          "migrations_dir": "./drizzle/cloudflare_d1",
+          "migrations_table": "zzz_migrations"
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "KV",
+          "id": "41967af7ca5940c3892e6c0c77ddf79a"
+        }
+      ],
+      "ai": {
+        "binding": "AI"
+      }
+    },
+    "production": {
+      "workers_dev": false,
+      "routes": [
+        {
+          "pattern": "breezestack.bhanu.dev",
+          "custom_domain": true
+        }
+      ],
+      "vars": {
+        "APP__ENV": "production",
+        "APP__NAME": "Breeze Stack"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "breezestack_prd",
+          "database_id": "0382f10c-3139-41b7-8477-f861b02ab555",
+          "migrations_dir": "./drizzle/cloudflare_d1",
+          "migrations_table": "zzz_migrations"
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "KV",
+          "id": "b9154c2d85ad40b294833e02d9829327"
+        }
+      ],
+      "ai": {
+        "binding": "AI"
+      }
+    }
+  }
+}

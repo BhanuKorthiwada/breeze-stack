@@ -1,0 +1,56 @@
+on:
+  push:
+    branches:
+      - main
+      - 'releases/**'
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose an environment to deploy'
+        required: true
+        type: choice
+        default: 'staging'
+        options:
+          - development
+          - staging
+          - production
+
+env:
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  WRANGLER_SEND_METRICS: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          check-latest: true
+          cache: 'pnpm'
+          cache-dependency-path: |
+            **/pnpm-lock.yaml
+            pnpm-lock.yaml
+            pnpm-workspace.yaml
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+
+      - name: Deploy
+        id: deploy
+        continue-on-error: true
+        run: |
+          pnpm run deploy:${{ inputs.environment || 'staging' }}
