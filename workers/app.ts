@@ -1,18 +1,26 @@
-import { getLoadContext } from "load-context";
-import { createRequestHandler } from "react-router";
+import { createRequestHandler } from 'react-router'
+import * as schema from '../database/cloudflare_d1/schema'
+import { type DrizzleD1Database, drizzle } from 'drizzle-orm/d1'
 
-const requestHandler = createRequestHandler(
-  // @ts-expect-error - virtual module provided by React Router at build time
-  () => import("virtual:react-router/server-build"),
-  import.meta.env.MODE
-);
+declare module 'react-router' {
+  export interface AppLoadContext {
+    cloudflare: {
+      env: CloudflareWorkerEnvironment
+      ctx: ExecutionContext
+    }
+    db: DrizzleD1Database<typeof schema>
+  }
+}
+
+const requestHandler = createRequestHandler(() => import('virtual:react-router/server-build'), import.meta.env.MODE)
 
 export default {
-  fetch(request, env, ctx) {
-    const loadContext = getLoadContext({
-      request,
-      context: { cloudflare: { env, ctx } },
-    });
-    return requestHandler(request, loadContext);
-  },
-} satisfies ExportedHandler<CloudflareEnvironment>;
+  async fetch(request, env, ctx) {
+    const db = drizzle(env.DB, { schema })
+
+    return requestHandler(request, {
+      cloudflare: { env, ctx },
+      db
+    })
+  }
+} satisfies ExportedHandler<CloudflareWorkerEnvironment>

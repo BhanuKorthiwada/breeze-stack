@@ -34,8 +34,10 @@ export const createAuth = (env: CloudflareWorkerEnvironment, db: DrizzleD1Databa
     advanced: {
       cookiePrefix: 'bs',
       useSecureCookies: env.APP__ENV === 'production',
-      generateId: () => {
-        return crypto.randomUUID()
+      database: {
+        generateId: () => {
+          return crypto.randomUUID()
+        }
       }
     }
   })
