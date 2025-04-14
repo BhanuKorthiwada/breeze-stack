@@ -5,7 +5,7 @@ import { AppFooter } from '~/components/app-footer'
 import { AppHeader } from '~/components/app-header'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  const auth = createAuth(context.cloudflare.env, context.db)
+  const auth = createAuth(context.db)
   const sessionData = await auth.api.getSession({
     headers: request.headers
   })

@@ -3,7 +3,7 @@ import { createAuth } from '~/services/auth.server'
 import type { Route } from './+types/_app'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  const auth = createAuth(context.cloudflare.env, context.db)
+  const auth = createAuth(context.db)
   const sessionData = await auth.api.getSession({
     headers: request.headers
   })

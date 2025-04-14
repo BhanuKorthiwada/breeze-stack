@@ -20,7 +20,7 @@ export const meta: MetaFunction = () => {
 }
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  const auth = createAuth(context.cloudflare.env, context.db)
+  const auth = createAuth(context.db)
   const sessionData = await auth.api.getSession({
     headers: request.headers
   })
@@ -71,7 +71,7 @@ export const action = async ({ request, context }: Route.ActionArgs) => {
       }
     }
 
-    const auth = createAuth(context.cloudflare.env, context.db)
+    const auth = createAuth(context.db)
 
     if (submission.value.intent === 'google') {
       const authResponse = await auth.api.signInSocial({

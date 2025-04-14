@@ -4,7 +4,7 @@ import { apiKey, organization, twoFactor } from 'better-auth/plugins'
 import type { DrizzleD1Database } from 'drizzle-orm/d1'
 import type * as schema from '~/database/cloudflare_d1/schema'
 
-export const createAuth = (env: CloudflareWorkerEnvironment, db: DrizzleD1Database<typeof schema>) =>
+export const createAuth = (db: DrizzleD1Database<typeof schema>) =>
   betterAuth({
     database: drizzleAdapter(db, {
       provider: 'sqlite',
@@ -23,7 +23,7 @@ export const createAuth = (env: CloudflareWorkerEnvironment, db: DrizzleD1Databa
       twoFactor(),
       apiKey()
     ],
-    secret: env.BETTER_AUTH__SECRET,
+    secret: process.env.BETTER_AUTH__SECRET,
     emailAndPassword: {
       enabled: true
     },
@@ -33,7 +33,7 @@ export const createAuth = (env: CloudflareWorkerEnvironment, db: DrizzleD1Databa
     },
     advanced: {
       cookiePrefix: 'bs',
-      useSecureCookies: env.APP__ENV === 'production',
+      useSecureCookies: process.env.APP__ENV === 'production',
       database: {
         generateId: () => {
           return crypto.randomUUID()
